@@ -1,43 +1,26 @@
-import {View, Text, ScrollView, TouchableOpacity, Image} from 'react-native';
-import React from 'react';
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  Pressable,
+} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {useNavigation} from '@react-navigation/native';
+import axiosInstance from '../../../apis/axios';
+import {launchCamera} from 'react-native-image-picker';
+import {AuthContext} from '../../../context/AuthContext';
 const Stories = () => {
   const navigation = useNavigation();
+  const [storyInfo, setStoryInfo] = useState([]);
+  const [image, setImage] = useState('');
+  const {profile} = useContext(AuthContext);
+  useEffect(() => {
+    axiosInstance.get('/stories').then(res => setStoryInfo(res.data.stories));
+  }, []);
 
-  const storyInfo = [
-    {
-      id: 1,
-      name: 'your Story',
-      image: require('../../storage/images/userProfile.png'),
-    },
-    {
-      id: 0,
-      name: 'Cardi B',
-      image: require('../../storage/images/profile1.png'),
-    },
-
-    {
-      id: 0,
-      name: 'Tom',
-      image: require('../../storage/images/profile2.png'),
-    },
-    {
-      id: 0,
-      name: 'Alex',
-      image: require('../../storage/images/profile3.png'),
-    },
-    {
-      id: 0,
-      name: 'Baby',
-      image: require('../../storage/images/profile4.png'),
-    },
-    {
-      id: 0,
-      name: 'Groot',
-      image: require('../../storage/images/profile5.png'),
-    },
-  ];
   return (
     <ScrollView
       horizontal={true}
@@ -48,7 +31,6 @@ const Stories = () => {
           <TouchableOpacity
             key={index}
             onPress={() => {
-              console.log('status');
               navigation.push('Status', {
                 name: data.name,
                 image: data.image,
@@ -90,16 +72,31 @@ const Stories = () => {
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
-                <Image
-                  source={data.image}
-                  style={{
-                    resizeMode: 'cover',
-                    width: '92%',
-                    height: '92%',
-                    borderRadius: 100,
-                    backgroundColor: 'orange',
-                  }}
-                />
+                {data.id === 1 ? (
+                  <Image
+                    source={{
+                      uri: profile.profileImage,
+                    }}
+                    style={{
+                      resizeMode: 'cover',
+                      width: '92%',
+                      height: '92%',
+                      borderRadius: 100,
+                      backgroundColor: 'orange',
+                    }}
+                  />
+                ) : (
+                  <Image
+                    source={{uri: `${data.image}`}}
+                    style={{
+                      resizeMode: 'cover',
+                      width: '92%',
+                      height: '92%',
+                      borderRadius: 100,
+                      backgroundColor: 'orange',
+                    }}
+                  />
+                )}
               </View>
               <Text
                 style={{

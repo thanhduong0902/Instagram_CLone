@@ -2,19 +2,20 @@ import React, {useState, useContext} from 'react';
 import {View, Text, Image, TouchableOpacity, Pressable} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
-import {AuthContext} from '../../../context/auth';
+import {AuthContext} from '../../../context/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const ProfileBody = ({
   name,
   accountName,
   profileImage,
+  follow,
   followers,
   following,
   post,
 }) => {
-  const userCtx = useContext(AuthContext);
-
+  const {logout} = useContext(AuthContext);
+  console.log('profileIMg', profileImage);
   return (
     <View>
       {accountName ? (
@@ -50,9 +51,7 @@ export const ProfileBody = ({
           <Pressable
             style={{flexDirection: 'row', alignItems: 'center'}}
             onPress={() => {
-              AsyncStorage.removeItem('token');
-              userCtx.setUser('');
-              userCtx.setLoading(false);
+              logout();
             }}>
             <Text style={{color: 'red', fontFamily: 'Lobster-Regular'}}>
               Log out
@@ -72,7 +71,7 @@ export const ProfileBody = ({
             alignItems: 'center',
           }}>
           <Image
-            source={profileImage}
+            source={{uri: profileImage}}
             style={{
               resizeMode: 'cover',
               width: 80,
@@ -97,7 +96,7 @@ export const ProfileBody = ({
         </View>
         <View style={{alignItems: 'center'}}>
           <Text style={{fontWeight: 'bold', color: 'black', fontSize: 18}}>
-            {followers}
+            {follow ? followers + 1 : followers}
           </Text>
           <Text style={{color: 'black'}}>Followers</Text>
         </View>
@@ -112,9 +111,15 @@ export const ProfileBody = ({
   );
 };
 
-export const ProfileButtons = ({id, name, accountName, profileImage}) => {
+export const ProfileButtons = ({
+  id,
+  follow,
+  name,
+  accountName,
+  profileImage,
+}) => {
   const navigation = useNavigation();
-  const [follow, setFollow] = useState(follow);
+  const [isfollow, setFollow] = useState(follow);
   return (
     <>
       {id === 0 ? (
@@ -169,21 +174,21 @@ export const ProfileButtons = ({id, name, accountName, profileImage}) => {
             alignItems: 'center',
           }}>
           <TouchableOpacity
-            onPress={() => setFollow(!follow)}
+            onPress={() => setFollow(!isfollow)}
             style={{width: '42%'}}>
             <View
               style={{
                 width: '100%',
                 height: 35,
                 borderRadius: 5,
-                backgroundColor: follow ? null : '#3493D9',
-                borderWidth: follow ? 1 : 0,
+                backgroundColor: isfollow ? null : '#3493D9',
+                borderWidth: isfollow ? 1 : 0,
                 borderColor: '#DEDEDE',
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
-              <Text style={{color: follow ? 'black' : 'white'}}>
-                {follow ? 'Following' : 'Follow'}
+              <Text style={{color: isfollow ? 'black' : 'white'}}>
+                {isfollow ? 'Following' : 'Follow'}
               </Text>
             </View>
           </TouchableOpacity>

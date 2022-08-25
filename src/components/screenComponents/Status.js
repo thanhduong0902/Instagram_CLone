@@ -73,13 +73,13 @@ const Status = ({route, navigation}) => {
             alignItems: 'center',
           }}>
           <Image
-            source={route.params.image}
+            source={{uri: route.params.image}}
             style={{
               borderRadius: 100,
               backgroundColor: 'orange',
-              resizeMode: 'cover',
-              width: '92%',
-              height: '92%',
+              resizeMode: 'contain',
+              width: '100%',
+              height: '100%',
             }}
           />
         </View>
@@ -98,7 +98,7 @@ const Status = ({route, navigation}) => {
         </View>
       </View>
       <Image
-        source={route.params.image}
+        source={{uri: route.params.image}}
         style={{
           position: 'absolute',
           width: '100%',

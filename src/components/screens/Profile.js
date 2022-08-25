@@ -3,28 +3,12 @@ import React, {useContext, useEffect, useState} from 'react';
 import {ProfileBody, ProfileButtons} from '../screenComponents/ProfileBody';
 import Entypo from 'react-native-vector-icons/Entypo';
 import BottomTabView from '../screenComponents/BottomTabView';
-import {AuthContext} from '../../../context/auth';
-import axiosInstance from '../../../apis/axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Button} from '@rneui/base';
+import {AuthContext} from '../../../context/AuthContext';
 
 const Profile = () => {
-  const [profile, setProfile] = useState('');
-  const user = useContext(AuthContext);
-  console.log(user.user);
-  let circuls = [];
+  const {profile} = useContext(AuthContext);
 
-  useEffect(() => {
-    AsyncStorage.getItem('token').then(token => {
-      if (!token) {
-        return;
-      }
-      axiosInstance.get('/mypost').then(res => {
-        setProfile(res.data.userPost);
-      });
-    });
-  }, []);
-  console.log(profile);
+  let circuls = [];
 
   for (let i = 0; i < 10; i++) {
     circuls.push(
@@ -62,15 +46,20 @@ const Profile = () => {
     <View style={{width: '100%', height: '100%', backgroundColor: 'white'}}>
       <View style={{width: '100%', padding: 10}}>
         <ProfileBody
-          name="1"
-          accountName="1"
-          profileImage="1"
-          followers="1"
-          following="1"
-          post="1"
+          name={profile.name}
+          accountName={profile.accountName}
+          profileImage={profile.profileImage}
+          followers={profile.followers}
+          following={profile.following}
+          post={profile.post}
         />
 
-        <ProfileButtons id={0} name="1" accountName="1" profileImage="1" />
+        <ProfileButtons
+          id={0}
+          name={profile.name}
+          accountName={profile.accountName}
+          profileImage={profile.profileImage}
+        />
       </View>
       <View>
         <Text

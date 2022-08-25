@@ -1,116 +1,32 @@
-import {View, Text, Image, TouchableOpacity, TextInput} from 'react-native';
-import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  TextInput,
+  SafeAreaView,
+} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionic from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
+import axiosInstance, {getPost} from '../../../apis/axios';
+import {AuthContext} from '../../../context/AuthContext';
 
 const Post = () => {
-  const postInfo = [
-    {
-      postTitle: 'David',
-      postPersonImage: require('../../storage/images/userProfile.png'),
-      postImage: require('../../storage/images/post1.jpg'),
-      likes: 666,
-      isLiked: false,
-      caption: 'How you like that😍',
-      comments: [
-        {user: 'th rock', comment: 'Amazing😍'},
-        {
-          user: 'yoona',
-          comment: 'SNSD😊',
-        },
-      ],
-    },
-    {
-      postTitle: 'thoa.smile',
-      postPersonImage: require('../../storage/images/profile2.png'),
-      postImage: require('../../storage/images/post2.jpg'),
-      likes: 789,
-      isLiked: false,
-      caption: 'How you like that',
-      comments: [
-        {user: 'th rock', comment: 'Amazing'},
-        
-      ],
-    },
-    {
-      postTitle: 'Scott',
-      postPersonImage: require('../../storage/images/profile3.png'),
-      postImage: require('../../storage/images/post3.jpg'),
-      likes: 123,
-      isLiked: true,
-      caption: 'How you like that',
-      comments: [
-        {user: 'th rock', comment: 'Amazing'},
-        {
-          user: 'yoona',
-          comment: 'SNSD',
-        },
-      ],
-    },
-    {
-      postTitle: 'blackpink.official',
-      postPersonImage: require('../../storage/images/profile4.png'),
-      postImage: require('../../storage/images/post4.jpg'),
-      likes: 561,
-      isLiked: false,
-      caption: 'How you like that',
-      comments: [
-        
-      ],
-    },
-    {
-      postTitle: 'Kulture',
-      postPersonImage: require('../../storage/images/profile5.png'),
-      postImage: require('../../storage/images/post5.jpg'),
-      likes: 2324,
-      isLiked: false,
-      caption: 'How you like that',
-      comments: [
-        {user: 'th rock', comment: 'Amazing'},
-        {
-          user: 'yoona',
-          comment: 'SNSD😍',
-        },
-      ],
-    },
-    {
-      postTitle: 'CardiB',
-      postPersonImage: require('../../storage/images/userProfile.png'),
-      postImage: require('../../storage/images/post6.jpg'),
-      likes: 666,
-      isLiked: false,
-      caption: 'How you like that',
-      comments: [
-        {user: 'th rock', comment: 'Amazing😍'},
-        {
-          user: 'yoona',
-          comment: 'SNSD😍',
-        },
-      ],
-    },
-    {
-      postTitle: 'Nicki',
-      postPersonImage: require('../../storage/images/userProfile.png'),
-      postImage: require('../../storage/images/post7.jpg'),
-      likes: 666,
-      isLiked: false,
-      caption: 'How you like that',
-      comments: [
-        {user: 'th rock', comment: 'Amazing'},
-        {
-          user: 'yoona',
-          comment: 'SNSD',
-        },
-      ],
-    },
-  ];
+  const [postInfo, setPostInfo] = useState([]);
+  const {profile} = useContext(AuthContext);
+  const [like, setLike] = useState(false);
+  useEffect(() => {
+    axiosInstance
+      .get('/allpost')
+      .then(res => setPostInfo(res.data.posts.reverse()));
+  }, [postInfo]);
 
   return (
-    <View>
+    <SafeAreaView>
       {postInfo.map((data, index) => {
-        const [like, setLike] = useState(data.isLiked);
         return (
           <View
             key={index}
@@ -127,24 +43,49 @@ const Post = () => {
                 padding: 15,
               }}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Image
-                  source={data.postPersonImage}
-                  style={{width: 40, height: 40, borderRadius: 100}}
-                />
+                {data.user !== profile.name ? (
+                  <>
+                    <Image
+                      source={{uri: `${data.postPersonImage}`}}
+                      style={{width: 40, height: 40, borderRadius: 100}}
+                    />
 
-                <View
-                  style={{
-                    paddingLeft: 5,
-                  }}>
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      fontWeight: 'bold',
-                      color: 'black',
-                    }}>
-                    {data.postTitle}
-                  </Text>
-                </View>
+                    <View
+                      style={{
+                        paddingLeft: 5,
+                      }}>
+                      <Text
+                        style={{
+                          fontSize: 15,
+                          fontWeight: 'bold',
+                          color: 'black',
+                        }}>
+                        {data.user}
+                      </Text>
+                    </View>
+                  </>
+                ) : (
+                  <>
+                    <Image
+                      source={{uri: profile.profileImage}}
+                      style={{width: 40, height: 40, borderRadius: 100}}
+                    />
+
+                    <View
+                      style={{
+                        paddingLeft: 5,
+                      }}>
+                      <Text
+                        style={{
+                          fontSize: 15,
+                          fontWeight: 'bold',
+                          color: 'black',
+                        }}>
+                        {profile.name}
+                      </Text>
+                    </View>
+                  </>
+                )}
               </View>
               <Feather
                 name="more-vertical"
@@ -158,7 +99,9 @@ const Post = () => {
                 alignItems: 'center',
               }}>
               <Image
-                source={data.postImage}
+                source={{
+                  uri: `${data.postImage}`,
+                }}
                 style={{width: '100%', height: 400}}
               />
             </View>
@@ -196,10 +139,19 @@ const Post = () => {
               <Feather name="bookmark" style={{fontSize: 20, color: 'black'}} />
             </View>
             <View style={{paddingHorizontal: 15}}>
-              <Text style={{color: 'black', fontWeight: 'bold'}}>
-                Liked by {like ? 'you and ' : ''}
-                {data.likes} others
-              </Text>
+              {!data.likes && !like && null}
+              {!data.likes && like && (
+                <Text style={{color: 'black', fontWeight: 'bold'}}>
+                  Liked by you
+                </Text>
+              )}
+              {!data.likes ? null : (
+                <Text style={{color: 'black', fontWeight: 'bold'}}>
+                  {like
+                    ? `Liked by you and ${data.likes} others `
+                    : `Liked by ${data.likes}`}
+                </Text>
+              )}
               <View style={{flexDirection: 'row'}}>
                 <Text
                   style={{
@@ -207,7 +159,7 @@ const Post = () => {
 
                     color: 'black',
                   }}>
-                  {data.postTitle}
+                  {data.user}
                 </Text>
                 <Text style={{color: 'black'}}> {data.caption}</Text>
               </View>
@@ -223,7 +175,9 @@ const Post = () => {
                     alignItems: 'center',
                   }}>
                   <Image
-                    source={data.postPersonImage}
+                    source={{
+                      uri: profile.profileImage,
+                    }}
                     style={{
                       width: 25,
                       height: 25,
@@ -253,7 +207,7 @@ const Post = () => {
           </View>
         );
       })}
-    </View>
+    </SafeAreaView>
   );
 };
 

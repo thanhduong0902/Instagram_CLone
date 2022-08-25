@@ -6,9 +6,12 @@ import {
   StyleSheet,
   TouchableOpacity,
   Pressable,
+  ToastAndroid,
 } from 'react-native';
 import React, {useState} from 'react';
 import Ionic from 'react-native-vector-icons/Ionicons';
+import LinearGradient from 'react-native-linear-gradient';
+
 import {useNavigation} from '@react-navigation/native';
 import axiosInstance from '../../../apis/axios';
 const RegisterForm = () => {
@@ -16,6 +19,9 @@ const RegisterForm = () => {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [err, setErr] = useState('');
+  const TostMessange = () => {
+    ToastAndroid.show('Sign up successfully', ToastAndroid.SHORT);
+  };
   const handleSubmit = async () => {
     try {
       const respone = await axiosInstance.post('/signup', {
@@ -23,6 +29,12 @@ const RegisterForm = () => {
         password: password,
       });
       setErr(respone.data.message);
+      if (respone.data.message === 'User created successfully') {
+        TostMessange();
+        navigation.navigate('SetProfile', {
+          accountName: userName,
+        });
+      }
     } catch (err) {}
   };
 
@@ -106,7 +118,35 @@ const RegisterForm = () => {
         </View>
       ) : null}
 
-      <Button title="Sign up" onPress={handleSubmit} />
+      <TouchableOpacity onPress={handleSubmit}>
+        <LinearGradient
+          colors={[
+            'rgb(243,91,52)',
+            'rgb(250,192,93)',
+            'rgb(252,30,29)',
+            'rgb(250,192,93)',
+            'rgb(204,5,130)',
+            'rgb(204,5,130)',
+            'rgb(96,35,214)',
+          ]}
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 0}}
+          style={{
+            padding: 10,
+            borderRadius: 10,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text
+            style={{
+              fontFamily: 'Lobster-Regular',
+              color: 'white',
+              fontSize: 24,
+            }}>
+            Sign up
+          </Text>
+        </LinearGradient>
+      </TouchableOpacity>
     </View>
   );
 };

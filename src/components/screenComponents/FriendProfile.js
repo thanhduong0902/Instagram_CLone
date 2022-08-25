@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, ScrollView, Image} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+  Button,
+} from 'react-native';
 import Ionic from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -46,11 +53,12 @@ const FriendProfile = ({route, navigation}) => {
       <ProfileBody
         name={name}
         profileImage={profileImage}
-        post={post}
         follow={follow}
+        post={post}
         followers={followers}
         following={following}
       />
+
       <ProfileButtons id={1} follow={follow} />
       <Text
         style={{

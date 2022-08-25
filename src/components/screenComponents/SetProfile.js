@@ -7,34 +7,33 @@ import {
   TextInput,
   Pressable,
 } from 'react-native';
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import Ionic from 'react-native-vector-icons/Ionicons';
 import {launchImageLibrary} from 'react-native-image-picker';
 import axiosInstance from '../../../apis/axios';
-import {AuthContext} from '../../../context/AuthContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const EditProfile = ({route, navigation}) => {
-  const {setProfile} = useContext(AuthContext);
-  const {name, accountName, profileImage} = route.params;
-  const [newName, setNewName] = useState('');
-  const [photo, setPhoto] = useState(profileImage);
-  const [update, setUpdate] = useState(false);
-  const TostMessange = () => {
-    ToastAndroid.show('Edited Successfully', ToastAndroid.SHORT);
-  };
+const SetProfile = ({route, navigation}) => {
+  const [name, setName] = useState('');
+  const accountName = route.params.accountName;
+  const [image, setImage] = useState('');
+
   const handleUploadImage = async () => {
     const result = await launchImageLibrary();
-    setPhoto(result.assets[0].uri);
-    setUpdate(true);
+    console.log(result.assets[0].uri);
+    setImage(result.assets[0].uri);
   };
-  const EditProfile = async () => {
-    const respone = await axiosInstance.put('/profile', {
-      name: newName,
+  const SetProfile = async () => {
+    const respone = await axiosInstance.post('/createprofile', {
+      name: name,
       accountName: accountName,
-      profileImage: photo,
+      profileImage: image,
     });
-    setProfile(respone.data.profile);
-    setUpdate(false);
+    AsyncStorage.setItem('profile', JSON.stringify(respone.data.profile));
+  };
+
+  const TostMessange = () => {
+    ToastAndroid.show('Set up Successfully', ToastAndroid.SHORT);
   };
   return (
     <View
@@ -54,11 +53,11 @@ const EditProfile = ({route, navigation}) => {
           <Ionic name="close-outline" style={{fontSize: 36, color: 'black'}} />
         </TouchableOpacity>
         <Text style={{fontSize: 16, color: 'black', fontWeight: 'bold'}}>
-          EditProfile
+          Set up Profile
         </Text>
         <TouchableOpacity
           onPress={() => {
-            EditProfile();
+            SetProfile();
             TostMessange();
             navigation.goBack();
           }}>
@@ -66,33 +65,29 @@ const EditProfile = ({route, navigation}) => {
         </TouchableOpacity>
       </View>
       <View style={{padding: 20, alignItems: 'center'}}>
-        {update ? (
-          <Image
-            source={{uri: photo}}
-            style={{width: 80, height: 80, borderRadius: 100}}
-          />
-        ) : (
-          <Image
-            source={{uri: profileImage}}
-            style={{width: 80, height: 80, borderRadius: 100}}
-          />
-        )}
         <Pressable onPress={handleUploadImage}>
-          <Text
-            style={{
-              color: '#3493D9',
-            }}>
-            Change Profile Photo
-          </Text>
+          <Image
+            source={
+              image === ''
+                ? require('../../storage/images/update_image.png')
+                : {uri: image}
+            }
+            style={{width: 80, height: 80, borderRadius: 100}}
+          />
         </Pressable>
+        <Text
+          style={{
+            color: '#3493D9',
+          }}>
+          Upload Profile Photo
+        </Text>
       </View>
       <View style={{padding: 10}}>
         <View>
           <Text style={{color: 'black', opacity: 0.5}}>Name</Text>
           <TextInput
             placeholder="name"
-            defaultValue={name}
-            onChangeText={newText => setNewName(newText)}
+            onChangeText={newText => setName(newText)}
             style={{
               fontSize: 16,
               borderBottomWidth: 1,
@@ -101,7 +96,7 @@ const EditProfile = ({route, navigation}) => {
           />
         </View>
         <View style={{paddingVertical: 10}}>
-          <Text style={{color: 'black', opacity: 0.5}}>Username</Text>
+          <Text style={{color: 'black', opacity: 0.5}}>AccountName</Text>
           <TextInput
             placeholder="accountname"
             defaultValue={accountName}
@@ -161,4 +156,4 @@ const EditProfile = ({route, navigation}) => {
   );
 };
 
-export default EditProfile;
+export default SetProfile;
