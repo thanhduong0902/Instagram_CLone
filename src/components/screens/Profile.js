@@ -7,6 +7,7 @@ import {AuthContext} from '../../../context/AuthContext';
 
 const Profile = () => {
   const {profile} = useContext(AuthContext);
+  console.log(profile);
 
   let circuls = [];
 

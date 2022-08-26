@@ -24,12 +24,11 @@ const SetProfile = ({route, navigation}) => {
     setImage(result.assets[0].uri);
   };
   const SetProfile = async () => {
-    const respone = await axiosInstance.post('/createprofile', {
+    const respone = await axiosInstance.put('/profile', {
       name: name,
       accountName: accountName,
       profileImage: image,
     });
-    AsyncStorage.setItem('profile', JSON.stringify(respone.data.profile));
   };
 
   const TostMessange = () => {

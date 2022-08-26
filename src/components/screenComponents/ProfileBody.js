@@ -15,7 +15,16 @@ export const ProfileBody = ({
   post,
 }) => {
   const {logout} = useContext(AuthContext);
-  console.log('profileIMg', profileImage);
+  console.log(
+    'profileBody',
+    name,
+    accountName,
+    profileImage,
+    follow,
+    followers,
+    following,
+    post,
+  );
   return (
     <View>
       {accountName ? (
@@ -71,7 +80,9 @@ export const ProfileBody = ({
             alignItems: 'center',
           }}>
           <Image
-            source={{uri: profileImage}}
+            source={{
+              uri: profileImage,
+            }}
             style={{
               resizeMode: 'cover',
               width: 80,
@@ -132,13 +143,7 @@ export const ProfileButtons = ({
             paddingVertical: 5,
           }}>
           <TouchableOpacity
-            onPress={() =>
-              navigation.push('EditProfile', {
-                name: name,
-                accountName: accountName,
-                profileImage: profileImage,
-              })
-            }
+            onPress={() => navigation.push('EditProfile')}
             style={{
               width: '100%',
             }}>

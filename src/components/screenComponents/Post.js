@@ -17,6 +17,7 @@ import {AuthContext} from '../../../context/AuthContext';
 const Post = () => {
   const [postInfo, setPostInfo] = useState([]);
   const {profile} = useContext(AuthContext);
+  //console.log('profile Post', profile);
   const [like, setLike] = useState(false);
   useEffect(() => {
     axiosInstance

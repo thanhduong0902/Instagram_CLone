@@ -13,11 +13,11 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import axiosInstance from '../../../apis/axios';
 import {AuthContext} from '../../../context/AuthContext';
 
-const EditProfile = ({route, navigation}) => {
-  const {setProfile} = useContext(AuthContext);
-  const {name, accountName, profileImage} = route.params;
+const EditProfile = ({navigation}) => {
+  const {profile, setProfile} = useContext(AuthContext);
+
   const [newName, setNewName] = useState('');
-  const [photo, setPhoto] = useState(profileImage);
+  const [photo, setPhoto] = useState(profile.profileImage);
   const [update, setUpdate] = useState(false);
   const TostMessange = () => {
     ToastAndroid.show('Edited Successfully', ToastAndroid.SHORT);
@@ -28,11 +28,13 @@ const EditProfile = ({route, navigation}) => {
     setUpdate(true);
   };
   const EditProfile = async () => {
+    console.log('profile edit', profile);
     const respone = await axiosInstance.put('/profile', {
       name: newName,
-      accountName: accountName,
+      accountName: profile.accountName,
       profileImage: photo,
     });
+    console.log('edit', respone.data.profile);
     setProfile(respone.data.profile);
     setUpdate(false);
   };
@@ -73,7 +75,7 @@ const EditProfile = ({route, navigation}) => {
           />
         ) : (
           <Image
-            source={{uri: profileImage}}
+            source={{uri: profile.profileImage}}
             style={{width: 80, height: 80, borderRadius: 100}}
           />
         )}
@@ -91,7 +93,7 @@ const EditProfile = ({route, navigation}) => {
           <Text style={{color: 'black', opacity: 0.5}}>Name</Text>
           <TextInput
             placeholder="name"
-            defaultValue={name}
+            defaultValue={profile.name}
             onChangeText={newText => setNewName(newText)}
             style={{
               fontSize: 16,
@@ -104,7 +106,7 @@ const EditProfile = ({route, navigation}) => {
           <Text style={{color: 'black', opacity: 0.5}}>Username</Text>
           <TextInput
             placeholder="accountname"
-            defaultValue={accountName}
+            defaultValue={profile.accountName}
             style={{
               fontSize: 16,
               borderBottomWidth: 1,

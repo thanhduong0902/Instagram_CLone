@@ -15,9 +15,11 @@ import {AuthContext} from '../../../context/AuthContext';
 const Stories = () => {
   const navigation = useNavigation();
   const [storyInfo, setStoryInfo] = useState([]);
-  const [image, setImage] = useState('');
+
   const {profile} = useContext(AuthContext);
+
   useEffect(() => {
+    console.log('profile Story', profile.profileImage);
     axiosInstance.get('/stories').then(res => setStoryInfo(res.data.stories));
   }, []);
 
@@ -33,7 +35,7 @@ const Stories = () => {
             onPress={() => {
               navigation.push('Status', {
                 name: data.name,
-                image: data.image,
+                image: data.id === 1 ? profile.profileImage : data.image,
               });
             }}>
             <View

@@ -11,7 +11,14 @@ export const AuthProvider = ({children}) => {
   const [username, setUsername] = useState(null);
   const [err, setErr] = useState('');
   const [userInfo, setUserInfo] = useState(null);
-  const [profile, setProfile] = useState(null);
+  const [profile, setProfile] = useState({
+    name: null,
+    accountName: null,
+    profileImage: null,
+    followers: 0,
+    following: 0,
+    post: 0,
+  });
   const login = (username, password) => {
     setIsLoading(true);
     axiosInstance
@@ -25,12 +32,20 @@ export const AuthProvider = ({children}) => {
         setErr(res.data.message);
         if (res.data.message === 'Logged in successfully') {
           let userInfo = res.data;
-          setUsername(userInfo.user.username);
           setUserInfo(userInfo);
           setUserToken(userInfo.token);
+          setProfile({
+            name: userInfo.user.name,
+            accountName: userInfo.user.accountName,
+            profileImage: userInfo.user.profileImage,
+            followers: userInfo.user.followers,
+            following: userInfo.user.following,
+            post: userInfo.user.post,
+          });
+          AsyncStorage.setItem('profile', JSON.stringify(userInfo.user));
           AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
           AsyncStorage.setItem('token', userInfo.token);
-          console.log('username', userInfo.user.username);
+
           console.log('message', userInfo.message);
           console.log('user token', userInfo.token);
         }
@@ -44,6 +59,7 @@ export const AuthProvider = ({children}) => {
     setUserToken(null);
     AsyncStorage.removeItem('userInfo');
     AsyncStorage.removeItem('token');
+    AsyncStorage.removeItem('profile');
     setIsLoading(false);
   };
 
@@ -83,7 +99,6 @@ export const AuthProvider = ({children}) => {
         profile,
         setProfile,
         userInfo,
-        username,
       }}>
       {children}
     </AuthContext.Provider>
