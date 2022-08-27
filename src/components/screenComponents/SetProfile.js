@@ -127,30 +127,6 @@ const SetProfile = ({route, navigation}) => {
           />
         </View>
       </View>
-      <View>
-        <Text
-          style={{
-            marginVertical: 10,
-            padding: 10,
-            color: '#3493D9',
-            borderTopWidth: 1,
-            borderBottomWidth: 1,
-            borderColor: '#EFEFEF',
-          }}>
-          Switch to Professional Account
-        </Text>
-        <Text
-          style={{
-            marginVertical: 10,
-            padding: 10,
-            color: '#3493D9',
-            borderTopWidth: 1,
-            borderBottomWidth: 1,
-            borderColor: '#EFEFEF',
-          }}>
-          Personal information setting
-        </Text>
-      </View>
     </View>
   );
 };
