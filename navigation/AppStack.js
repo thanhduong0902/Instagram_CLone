@@ -10,6 +10,7 @@ import NewPostSCreen from '../src/components/screenComponents/NewPostSCreen';
 import Register from '../src/components/screens/Register';
 import BottomTabView from './TabNavigator';
 import Status from '../src/components/screenComponents/Status';
+import Comment from '../src/components/screenComponents/Comment';
 const Stack = createNativeStackNavigator();
 
 const AppStack = () => {
@@ -21,8 +22,8 @@ const AppStack = () => {
       <Stack.Screen name="Bottom" component={BottomTabView}></Stack.Screen>
       <Stack.Screen name="Status" component={Status}></Stack.Screen>
       <Stack.Screen name="Home" component={Home}></Stack.Screen>
-
       <Stack.Screen name="NewPost" component={NewPostSCreen}></Stack.Screen>
+      <Stack.Screen name="Comment" component={Comment}></Stack.Screen>
 
       <Stack.Screen
         name="FriendProfile"

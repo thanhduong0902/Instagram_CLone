@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   TextInput,
   SafeAreaView,
+  Pressable,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import Feather from 'react-native-vector-icons/Feather';
@@ -13,8 +14,10 @@ import Ionic from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import axiosInstance, {getPost} from '../../../apis/axios';
 import {AuthContext} from '../../../context/AuthContext';
+import {useNavigation} from '@react-navigation/native';
 
 const Post = () => {
+  const navigation = useNavigation();
   const [postInfo, setPostInfo] = useState([]);
   const {profile} = useContext(AuthContext);
   //console.log('profile Post', profile);
@@ -164,46 +167,14 @@ const Post = () => {
                 </Text>
                 <Text style={{color: 'black'}}> {data.caption}</Text>
               </View>
-              <Text style={{paddingVertical: 2}}>View All Comments</Text>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
+              <Pressable
+                onPress={() => {
+                  navigation.navigate('Comment', {
+                    data: data,
+                  });
                 }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}>
-                  <Image
-                    source={{
-                      uri: profile.profileImage,
-                    }}
-                    style={{
-                      width: 25,
-                      height: 25,
-                      borderRadius: 100,
-                      backgroundColor: 'orange',
-                      marginRight: 10,
-                    }}
-                  />
-                  <TextInput placeholder="Add a comment" />
-                </View>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Entypo
-                    name="emoji-happy"
-                    style={{fontSize: 18, color: 'green', marginRight: 10}}
-                  />
-                  <Entypo
-                    name="emoji-neutral"
-                    style={{fontSize: 18, color: 'purple', marginRight: 10}}
-                  />
-                  <Entypo
-                    name="emoji-sad"
-                    style={{fontSize: 18, color: 'red'}}
-                  />
-                </View>
-              </View>
+                <Text style={{paddingVertical: 2}}>View All Comments</Text>
+              </Pressable>
             </View>
           </View>
         );

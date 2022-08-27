@@ -1,12 +1,5 @@
 import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-  Button,
-} from 'react-native';
+import {View, Text, TouchableOpacity, ScrollView, Image} from 'react-native';
 import Ionic from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -53,13 +46,11 @@ const FriendProfile = ({route, navigation}) => {
       <ProfileBody
         name={name}
         profileImage={profileImage}
-        follow={follow}
         post={post}
         followers={followers}
         following={following}
       />
-
-      <ProfileButtons id={1} follow={follow} />
+      <ProfileButtons id={1} />
       <Text
         style={{
           paddingVertical: 10,
@@ -78,7 +69,7 @@ const FriendProfile = ({route, navigation}) => {
         {name === FriendProfile.name
           ? null
           : FriendsProfileData.map((data, index) => {
-              const [isFollow, setIsFollow] = useState(follow);
+              const [isFollow, setIsFollow] = useState(false);
               const [close, setClose] = useState(false);
               return (
                 <View key={index}>
@@ -112,7 +103,9 @@ const FriendProfile = ({route, navigation}) => {
                         />
                       </TouchableOpacity>
                       <Image
-                        source={data.profileImage}
+                        source={{
+                          uri: 'https://i.pinimg.com/236x/ec/d9/04/ecd904e6e389d56e5921a6e17e224ca2.jpg',
+                        }}
                         style={{
                           width: 80,
                           height: 80,
@@ -128,9 +121,7 @@ const FriendProfile = ({route, navigation}) => {
                         }}>
                         {data.name}
                       </Text>
-                      <Text style={{fontSize: 12, color: 'black'}}>
-                        {data.accountName}
-                      </Text>
+                      <Text style={{fontSize: 12}}>{data.accountName}</Text>
                       <TouchableOpacity
                         onPress={() => setIsFollow(!isFollow)}
                         style={{width: '80%', paddingVertical: 10}}>

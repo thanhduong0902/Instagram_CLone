@@ -3,7 +3,6 @@ import {View, Text, Image, TouchableOpacity, Pressable} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
 import {AuthContext} from '../../../context/AuthContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const ProfileBody = ({
   name,
@@ -15,16 +14,7 @@ export const ProfileBody = ({
   post,
 }) => {
   const {logout} = useContext(AuthContext);
-  console.log(
-    'profileBody',
-    name,
-    accountName,
-    profileImage,
-    follow,
-    followers,
-    following,
-    post,
-  );
+
   return (
     <View>
       {accountName ? (

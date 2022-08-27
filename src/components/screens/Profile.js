@@ -4,11 +4,15 @@ import {ProfileBody, ProfileButtons} from '../screenComponents/ProfileBody';
 import Entypo from 'react-native-vector-icons/Entypo';
 import BottomTabView from '../screenComponents/BottomTabView';
 import {AuthContext} from '../../../context/AuthContext';
+import axiosInstance from '../../../apis/axios';
 
 const Profile = () => {
   const {profile} = useContext(AuthContext);
   console.log(profile);
-
+  const [post, setPost] = useState([]);
+  useEffect(() => {
+    axiosInstance.get('/allpost').then(res => setPost(res.data.posts));
+  }, []);
   let circuls = [];
 
   for (let i = 0; i < 10; i++) {

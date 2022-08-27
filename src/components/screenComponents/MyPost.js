@@ -1,4 +1,11 @@
-import {View, Text} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+  SafeAreaView,
+} from 'react-native';
 import React, {useState, useContext, useEffect} from 'react';
 import axiosInstance from '../../../apis/axios';
 import {AuthContext} from '../../../context/AuthContext';
@@ -8,39 +15,47 @@ const MyPost = () => {
   const [post, setPost] = useState([]);
 
   useEffect(() => {
-    axiosInstance
-      .get('/mypost', {
-        user: profile.name,
-      })
-      .then(res => {
-        console.log(res.data);
-        setPost(res.data.userPost);
-      });
+    console.log(profile);
+    axiosInstance.get('/allpost').then(res => {
+      console.log(res.data.posts);
+      setPost(res.data.posts);
+    });
   }, []);
-
+  const postData = post.filter(item => {
+    return item.user === profile.name;
+  });
+  console.log(postData);
   return (
-    <View>
-      {post.map((data, index) => {
-        return (
+    <View
+      style={{
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'white',
+      }}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View>
           <View
-            key={index}
             style={{
               flexDirection: 'row',
               flexWrap: 'wrap',
-              justifyContent: 'space-between',
+
               width: '100%',
             }}>
-            <TouchableOpacity style={{paddingBottom: 2, width: '33%'}}>
-              <Image
-                source={{
-                  uri: `https://soshi.manuth.life/data/soshi/pictures/taeyeon/magazines/2019-october-cosmopolitan/7kjLv8Rk_o.jpg`,
-                }}
-                style={{width: '100%', height: 150}}
-              />
-            </TouchableOpacity>
+            {postData.map((data, index) => {
+              return (
+                <TouchableOpacity
+                  key={index}
+                  style={{paddingBottom: 2, width: '33%'}}>
+                  <Image
+                    source={{uri: data.postImage}}
+                    style={{width: '100%', height: 150}}
+                  />
+                </TouchableOpacity>
+              );
+            })}
           </View>
-        );
-      })}
+        </View>
+      </ScrollView>
     </View>
   );
 };

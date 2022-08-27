@@ -6,6 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 
 const Activity = () => {
   const navigation = useNavigation();
+
   return (
     <View style={{width: '100%', height: '100%', backgroundColor: 'white'}}>
       <Text
@@ -27,27 +28,26 @@ const Activity = () => {
           {FriendsProfileData.slice(0, 3).map((data, index) => {
             return (
               <TouchableOpacity
-                onPress={() =>
-                  navigation.push('FriendProfile', {
+                onPress={() => {
+                  navigation.navigate('FriendProfile', {
                     name: data.name,
                     profileImage: data.profileImage,
                     follow: data.follow,
                     post: data.posts,
                     followers: data.followers,
                     following: data.following,
-                  })
-                }
+                  });
+                }}
                 key={index}>
-                <Text style={{color: 'black', fontSize: 10}}>{data.name},</Text>
+                <Text style={{color: 'black', fontSize: 10}}>{data.name}</Text>
               </TouchableOpacity>
             );
           })}
           <Text style={{color: 'black', fontSize: 10}}>
-            {' '}
             Started following you
           </Text>
         </View>
-        <Text style={{fontWeight: 'bold'}}>Earlier</Text>
+        <Text style={{fontWeight: 'bold', color: 'black'}}>Earlier</Text>
         {FriendsProfileData.slice(3, 6).map((data, index) => {
           const [follow, setFollow] = useState(data.follow);
           return (
@@ -78,7 +78,7 @@ const Activity = () => {
                     maxWidth: '64%',
                   }}>
                   <Image
-                    source={data.profileImage}
+                    source={{uri: data.profileImage}}
                     style={{
                       width: 45,
                       height: 45,
@@ -95,7 +95,7 @@ const Activity = () => {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => setFollow(!follow)}
-                  style={{width: follow ? 80 : 68}}>
+                  style={{width: follow ? 72 : 68}}>
                   <View
                     style={{
                       width: '100%',
@@ -108,7 +108,7 @@ const Activity = () => {
                       alignItems: 'center',
                     }}>
                     <Text
-                      style={{fontSize: 12, color: follow ? 'black' : 'white'}}>
+                      style={{color: follow ? 'black' : 'white', fontSize: 10}}>
                       {follow ? 'Following' : 'Follow'}
                     </Text>
                   </View>
@@ -151,7 +151,9 @@ const Activity = () => {
                         maxWidth: '64%',
                       }}>
                       <Image
-                        source={data.profileImage}
+                        source={{
+                          uri: 'https://i.pinimg.com/236x/d9/68/ed/d968ed5d96ea7840c8113323ff55c26a.jpg',
+                        }}
                         style={{
                           width: 45,
                           height: 45,
