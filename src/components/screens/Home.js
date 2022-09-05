@@ -15,18 +15,7 @@ const Home = () => {
   const navigation = useNavigation();
   const {setProfile, userToken} = useContext(AuthContext);
 
-  // const respone = async () => {
-  //   const result = axiosInstance.get('/profile', {
-  //     headers: {
-  //       authorization: 'Bearer ' + userToken,
-  //     },
-  //   });
-
-  //   AsyncStorage.setItem('profile', JSON.stringify(result.data.profile));
-  // };
-  // useEffect(() => {
-  //   respone();
-  // }, []);
+  
   return (
     <View style={{backgroundColor: 'white', height: '100%'}}>
       <StatusBar
